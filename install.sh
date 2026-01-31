@@ -80,8 +80,8 @@ sleep 5
 # Exctrating Zip Files
 echo "Extracting Files and Creating Tailscale Folders........"
 sleep 5
-tar -xf tailscale_1.80.0_$arch.tgz
-cd tailscale_1.80.0_$arch || exit 1
+tar -xf tailscale_1.94.1_$arch.tgz
+cd tailscale_1.94.1_$arch || exit 1
 rm -rf /userdata/tailscale
 mkdir /userdata/tailscale
 mv systemd /userdata/tailscale/systemd
