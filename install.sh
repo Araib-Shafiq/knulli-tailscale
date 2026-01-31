@@ -75,7 +75,7 @@ cd /userdata/temp || exit 1
 
 # Dowload tailscale zip as per architecture
 echo "Downloading tailscale for your system........"
-wget -q https://pkgs.tailscale.com/stable/tailscale_1.80.0_$arch.tgz
+wget -q https://pkgs.tailscale.com/stable/tailscale_1.94.1_$arch.tgz
 sleep 5
 # Exctrating Zip Files
 echo "Extracting Files and Creating Tailscale Folders........"
