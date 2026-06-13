@@ -14,15 +14,15 @@
 
 ***If you want only subnet to then use below script.***
 
-    curl -L https://raw.githubusercontent.com/codecs02-marcher/knulli-tailscale/refs/heads/main/install.sh | bash
+    curl -L https://raw.githubusercontent.com/Araib-Shafiq/knulli-tailscale/refs/heads/main/install.sh | bash
 
 ***If you want exit node and subnet to then use this script.***
 
-    curl -L https://raw.githubusercontent.com/codecs02-marcher/knulli-tailscale/refs/heads/main/install_exit_node.sh | bash
+    curl -L https://raw.githubusercontent.com/Araib-Shafiq/knulli-tailscale/refs/heads/main/install_exit_node.sh | bash
 
 ***If you want exit node and without accept routes then use this script.***
 
-    curl -L  https://raw.githubusercontent.com/codecs02-marcher/knulli-tailscale/refs/heads/main/install_exit_node_without_accept_routes.sh | bash
+    curl -L  https://raw.githubusercontent.com/Araib-Shafiq/knulli-tailscale/refs/heads/main/install_exit_node_without_accept_routes.sh | bash
 
 ***Step 3: Login to your tailscale with the given link and activate your knulli machine.***
 
