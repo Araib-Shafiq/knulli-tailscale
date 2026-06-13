@@ -1,43 +1,43 @@
-# Batocera-Tailscale
-**Run Tailscale in batocera with Subnet and Accept Routes, tailscale starts at boot so you can access "share folder" or "ssh" service remotely**
+# Knulli-Tailscale
+**Run Tailscale in knulli with Subnet and Accept Routes, tailscale starts at boot so you can access "share folder" or "ssh" service remotely**
 
-*Batocera comes with pre-enabled ssh, login using (**username:root and password:linux**)*
+*Knulli comes with pre-enabled ssh, login using (**username:root and password:linux**)*
 
 **Create a temp folder**
 
     mkdir /userdata/temp
     cd /userdata/temp
 
-**To find out your batocera architecture run this command**
+**To find out your knulli architecture run this command**
 
-    batocera-info | grep -oP 'Architecture:\s*\K.+'
+    knulli-info | grep -oP 'Architecture:\s*\K.+'
 
 or
 
     uname -m
    
 **Download appropriate file as per your system architecture
-details available in Batocera "SYSTEM SETTINGS > INFORMATION > ARCHITECTURE (example: armv7l or aarch64 or x86_64)**
+details available in Knulli "SYSTEM SETTINGS > INFORMATION > ARCHITECTURE (example: armv7l or aarch64 or x86_64)**
 
 arm/v7 or aarch32:
 
-    wget https://pkgs.tailscale.com/stable/tailscale_1.76.1_arm.tgz
+    wget https://pkgs.tailscale.com/stable/tailscale_1.98.4_arm.tgz
 
 arm64/v8 or aarch64:
 
-    wget https://pkgs.tailscale.com/stable/tailscale_1.76.1_arm64.tgz
+    wget https://pkgs.tailscale.com/stable/tailscale_1.98.4_arm64.tgz
 
 amd64:
 
-    wget https://pkgs.tailscale.com/stable/tailscale_1.76.1_amd64.tgz
+    wget https://pkgs.tailscale.com/stable/tailscale_1.98.4_amd64.tgz
 
 x86 or x86_64:
 
-    wget https://pkgs.tailscale.com/stable/tailscale_1.76.1_386.tgz
+    wget https://pkgs.tailscale.com/stable/tailscale_1.98.4_386.tgz
 
 riscv64:
 
-    wget https://pkgs.tailscale.com/stable/tailscale_1.76.1_riscv64.tgz
+    wget https://pkgs.tailscale.com/stable/tailscale_1.98.4_riscv64.tgz
 
 **Find out more packages at "Static binaries (other distros)"**
 
@@ -48,10 +48,10 @@ https://pkgs.tailscale.com/stable/#static
 **Next step is to unarchieve the downloaded file, carefully choose the right file name**
 
     tar -xf <File Name>
-example: tar -xf tailscale_1.76.1_arm64.tgz
+example: tar -xf tailscale_1.98.4_arm64.tgz
 
     cd <File Name Directory>
-example: cd tailscale_1.76.1_arm64
+example: cd tailscale_1.98.4_arm64
 
 **Create a new directory "tailscale" in share/userdata folder**
 
@@ -82,11 +82,11 @@ example: cd tailscale_1.76.1_arm64
     
 # Important to specify correct CIDR
 
-***My batocera ip address is 192.168.1.102 so my CIDR is 192.168.1.0/24***
+***My knulli ip address is 192.168.1.102 so my CIDR is 192.168.1.0/24***
 
 # Making changes to system
 
-***Creating tun, forwarding IP and saving batocera overlay to make the changes permanent***
+***Creating tun, forwarding IP and saving knulli overlay to make the changes permanent***
 
   
     mkdir -p /dev/net
@@ -94,7 +94,7 @@ example: cd tailscale_1.76.1_arm64
     chmod 600 /dev/net/tun
     echo 'net.ipv4.ip_forward = 1' | tee -a /etc/sysctl.conf
     echo 'net.ipv6.conf.all.forwarding = 1' | tee -a /etc/sysctl.conf
-    batocera-save-overlay
+    knulli-save-overlay
 
 # Now Activate your TailScale
 
@@ -104,7 +104,7 @@ example: cd tailscale_1.76.1_arm64
 
 ****If it does not give you a login link then run it again****
 
-***Login to your tailscale with the given link and activate your batocera machine***
+***Login to your tailscale with the given link and activate your knulli machine***
 
 ***Go to "Admin console" of tailscale and approve the newly added machine***
 
@@ -114,10 +114,10 @@ example: cd tailscale_1.76.1_arm64
 
 ***if you see tailscale ip then only proceed further, else you have made a mistake somewhere above***
 
-**Now Activate Batocera Service/Script to start with booth**
+**Now Activate Knulli Service/Script to start with booth**
 
-    batocera-services list
-    batocera-services enable tailscale
+    knulli-services list
+    knulli-services enable tailscale
     reboot
 
 **Wait for the machine to start and check your machine's IP**

@@ -1,5 +1,7 @@
 #!/bin/bash
 
+tailscale_ver="1.98.4"
+
 echo "......"
 sleep 2
 echo "............."
@@ -60,10 +62,10 @@ case ${arch} in
     ;;
 esac
 sleep 5
-batocera-services stop tailscale
+knulli-services stop tailscale
 echo "Stopping existing tailscale......."
 sleep 5 
-batocera-services disable tailscale
+knulli-services disable tailscale
 echo "Disabling existing tailscale......."
 sleep 5 
 # Creating temp files
@@ -75,14 +77,14 @@ cd /userdata/temp || exit 1
 
 # Dowload tailscale zip as per architecture
 echo "Downloading tailscale for your system........"
-wget -q https://pkgs.tailscale.com/stable/tailscale_1.94.1_$arch.tgz
+wget -q https://pkgs.tailscale.com/stable/tailscale_${tailscale_ver}_$arch.tgz
 sleep 5
 # Exctrating Zip Files
 echo "Extracting Files and Creating Tailscale Folders........"
 sleep 5
-gunzip tailscale_1.94.1_$arch.tgz
-tar -xf tailscale_1.94.1_$arch.tar
-cd tailscale_1.94.1_$arch || exit 1
+gunzip tailscale_${tailscale_ver}_$arch.tgz
+tar -xf tailscale_${tailscale_ver}_$arch.tar
+cd tailscale_${tailscale_ver}_$arch || exit 1
 rm -rf /userdata/tailscale
 mkdir /userdata/tailscale
 mv systemd /userdata/tailscale/systemd
@@ -135,7 +137,7 @@ fi
 /userdata/tailscale/tailscaled -state /userdata/tailscale/state > /userdata/tailscale/tailscaled.log 2>&1 &/userdata/tailscale/tailscale up --advertise-routes=$CIDR --snat-subnet-routes=false --accept-routes
 
 EOF
-echo "Creating tun, forwarding ip and saving batocera-overlay....."
+echo "Creating tun, forwarding ip and saving knulli-overlay....."
 sleep 5
 rm -rf /dev/net
 mkdir -p /dev/net
@@ -147,8 +149,8 @@ net.ipv4.ip_forward = 1
 net.ipv6.conf.all.forwarding = 1
 EOL
 
-batocera-save-overlay
-echo "Saving Batocera Overlay"
+knulli-save-overlay
+echo "Saving Knulli Overlay"
 sleep 5
 sysctl -p /etc/sysctl.conf
 echo "IP Forwarded Successfully"
@@ -164,7 +166,7 @@ if dmesg | grep -q "UDP GRO forwarding is suboptimally configured"; then
     # Disable Generic Receive Offload (GRO) on eth0
     ethtool -K $NETDEV rx-udp-gro-forwarding on rx-gro-list off
     ethtool -K $NETDEV gro off
-    batocera-save-overlay
+    knulli-save-overlay
     echo "Fixed UDP GRO forwarding issue on $NETDEV....."
     sleep 5
     /userdata/tailscale/tailscaled -state /userdata/tailscale/state > /userdata/tailscale/tailscaled.log 2>&1 &/userdata/tailscale/tailscale up
@@ -174,12 +176,12 @@ fi
 
 echo "Working on it........DONE"
 sleep 2
-batocera-services enable tailscale
-echo "Batocera services of tailscale enabled."
+knulli-services enable tailscale
+echo "Knulli services of tailscale enabled."
 sleep 5
-batocera-services start tailscale
-batocera-save-overlay
-echo "Batocera Started Successfully."
+knulli-services start tailscale
+knulli-save-overlay
+echo "Knulli Started Successfully."
 sleep 5
 echo "Check Tailscale interface and connected ip using command 'ip a'."
 sleep 5
@@ -191,11 +193,11 @@ echo ".........."
 sleep 2
 echo "Above you will see tailscale interface (example: 'tailscale0') below '$NETDEV' and 'tailscale ip'"
 sleep 10
-echo "if 'Yes' then you have successfully configured tailscale in your batocera machine."
+echo "if 'Yes' then you have successfully configured tailscale in your knulli machine."
 sleep 5
 echo "if 'No' then reboot your machine and run the script again."
 sleep 5
-echo "Go back to tailscale admin console page and click on your newaly added batocera machine and you'll find 'subnets' option waiting to be approved."
+echo "Go back to tailscale admin console page and click on your newaly added knulli machine and you'll find 'subnets' option waiting to be approved."
 sleep 2
 echo "Approve it, 'Disable Key Expiry' and you are done."
 sleep 2

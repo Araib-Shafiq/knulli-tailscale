@@ -1,5 +1,7 @@
 #!/bin/bash
 
+tailscale_ver="1.98.4"
+
 echo "......"
 sleep 1
 echo "............."
@@ -59,10 +61,10 @@ case ${arch} in
     ;;
 esac
 sleep 5
-batocera-services stop tailscale
+knulli-services stop tailscale
 echo "Stopping existing tailscale......."
 sleep 5
-batocera-services disable tailscale
+knulli-services disable tailscale
 echo "Disabling existing tailscale......"
 sleep 5
 
@@ -75,12 +77,12 @@ cd /userdata/temp || exit 1
 sleep 5
 # Dowload tailscale zip as per architecture
 echo "Downloading tailscale for your system........"
-wget -q https://pkgs.tailscale.com/stable/tailscale_1.82.5_$arch.tgz
+wget -q https://pkgs.tailscale.com/stable/tailscale_${tailscale_ver}_$arch.tgz
 sleep 8
 # Exctrating Zip Files
 echo "Extracting Files and Creating Tailscale Folders......."
-tar -xf tailscale_1.82.5_$arch.tgz
-cd tailscale_1.82.5_$arch || exit 1
+tar -xf tailscale_${tailscale_ver}_$arch.tgz
+cd tailscale_${tailscale_ver}_$arch || exit 1
 rm -rf /userdata/tailscale
 mkdir /userdata/tailscale
 mv systemd /userdata/tailscale/systemd
@@ -143,14 +145,14 @@ ethtool -K $INTERFACE rx-udp-gro-forwarding on rx-gro-list off
 ethtool -K $INTERFACE gro off
 iptables -t nat -A POSTROUTING -o $INTERFACE -j MASQUERADE
 ip6tables -t nat -A POSTROUTING -o $INTERFACE -j MASQUERADE
-batocera-save-overlay
+knulli-save-overlay
 if [[ "$1" != "start" ]]; then
   exit 0
 fi
 /userdata/tailscale/tailscaled -state /userdata/tailscale/state > /userdata/tailscale/tailscaled.log 2>&1 &/userdata/tailscale/tailscale up --advertise-routes=$CIDR --snat-subnet-routes=false --accept-routes=false --advertise-exit-node --accept-dns=true
 
 EOF
-echo "Creating tun, forwarding ip and saving batocera-overlay....."
+echo "Creating tun, forwarding ip and saving knulli-overlay....."
 rm -rf /dev/net
 mkdir -p /dev/net
 mknod /dev/net/tun c 10 200
@@ -166,8 +168,8 @@ sleep 4
 sysctl -p /etc/sysctl.conf
 echo "IP Forwarded......."
 sleep 4
-batocera-save-overlay
-echo "Batocera Overlay Saved......"
+knulli-save-overlay
+echo "Knulli Overlay Saved......"
 sleep 4
 
 # Start Tailscale daemon
@@ -179,8 +181,8 @@ sleep 5
 
 echo "Working on it........DONE"
 sleep 2
-batocera-services enable tailscale
-echo "Batocera services of tailscale enabled."
+knulli-services enable tailscale
+echo "Knulli services of tailscale enabled."
 sleep 5
 INTERFACE=$(ip -o -4 route show to default | awk '{print $5}')
 
@@ -221,7 +223,7 @@ ethtool -K $INTERFACE rx-udp-gro-forwarding on rx-gro-list off
 ethtool -K $INTERFACE gro off
 echo "starting tailscale with 'CIDR: $CIDR' and 'Exit Node'"
 /userdata/tailscale/tailscaled -state /userdata/tailscale/state > /userdata/tailscale/tailscaled.log 2>&1 &/userdata/tailscale/tailscale up --advertise-routes=$CIDR --snat-subnet-routes=false --accept-routes=false --advertise-exit-node --accept-dns=true
-echo "Batocera Started Successfully."
+echo "Knulli Started Successfully."
 sleep 5
 iptables -t nat -A POSTROUTING -o $INTERFACE -j MASQUERADE
 ip6tables -t nat -A POSTROUTING -o $INTERFACE -j MASQUERADE
@@ -235,11 +237,11 @@ echo ".........."
 sleep 2
 echo "Above you will see tailscale interface (example: 'tailscale0' below '$INTERFACE') and 'tailscale ip'"
 sleep 10
-echo "if 'Yes' then you have successfully configured tailscale in your batocera machine."
+echo "if 'Yes' then you have successfully configured tailscale in your knulli machine."
 sleep 5
 echo "if 'No' then reboot your machine and run the script again."
 sleep 5
-echo "Go back to tailscale admin console page and click on your newly added batocera machine and you'll find 'subnets' and 'exit node' options waiting to be approved."
+echo "Go back to tailscale admin console page and click on your newly added knulli machine and you'll find 'subnets' and 'exit node' options waiting to be approved."
 sleep 5
 echo "Approve them, Disable Key Expiry' and you are done."
 sleep 3

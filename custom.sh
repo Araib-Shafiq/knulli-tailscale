@@ -3,7 +3,7 @@
 case "$1" in
     start)
         # This will Start Tailscale on boot
-        batocera-services start tailscale
+        knulli-services start tailscale
 
         # Restart logic: Loop to check time
         (
